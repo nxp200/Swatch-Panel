@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swatch Panel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Swatch Panel</h1>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                <span class="sun-icon">☀️</span>
+                <span class="moon-icon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <!-- Input Panel -->
+        <section class="panel input-panel" aria-label="Color Input Panel">
+            <h2>Select Color</h2>
+            
+            <!-- Predefined Palette -->
+            <div class="section">
+                <h3>Predefined Palette</h3>
+                <div id="predefinedPalette" class="palette-grid" role="group" aria-label="Predefined color palette"></div>
+            </div>
+
+            <!-- Interactive Color Picker -->
+            <div class="section">
+                <h3>Interactive Picker</h3>
+                <div class="color-picker-container">
+                    <div class="picker-controls">
+                        <label for="hueSlider">Hue</label>
+                        <div class="hue-slider-container">
+                            <input type="range" id="hueSlider" min="0" max="360" value="210" aria-label="Hue slider">
+                            <div class="hue-gradient"></div>
+                        </div>
+                    </div>
+                    <div class="picker-controls">
+                        <label>Saturation & Lightness</label>
+                        <canvas id="slCanvas" width="280" height="200" aria-label="Saturation and lightness picker"></canvas>
+                        <div id="slIndicator" class="sl-indicator"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Input -->
+            <div class="section">
+                <h3>Manual Input</h3>
+                <div class="manual-input">
+                    <div class="input-group">
+                        <label for="hexInput">HEX</label>
+                        <input type="text" id="hexInput" placeholder="#3498DB" maxlength="7" aria-label="Hexadecimal color input">
+                        <span id="hexError" class="error-message" role="alert"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="rgbRInput">RGB</label>
+                        <div class="rgb-inputs">
+                            <input type="number" id="rgbRInput" min="0" max="255" placeholder="R" aria-label="Red value">
+                            <input type="number" id="rgbGInput" min="0" max="255" placeholder="G" aria-label="Green value">
+                            <input type="number" id="rgbBInput" min="0" max="255" placeholder="B" aria-label="Blue value">
+                        </div>
+                        <span id="rgbError" class="error-message" role="alert"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Panel -->
+        <section class="panel comparison-panel" aria-label="Text Preview Panel">
+            <h2>Text Preview</h2>
+            <div class="section">
+                <label for="previewText">Sample Text</label>
+                <input type="text" id="previewText" value="Sample Text Preview" aria-label="Text to preview">
+                <div id="previewArea" class="preview-area" aria-live="polite">
+                    Sample Text Preview
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Panel -->
+        <section class="panel results-panel" aria-label="Results and Output Panel">
+            <h2>Current Color</h2>
+            
+            <!-- Current Color Swatch -->
+            <div class="section">
+                <div id="currentColorSwatch" class="current-color-swatch" aria-label="Current selected color"></div>
+            </div>
+
+            <!-- Color Code Outputs -->
+            <div class="section">
+                <h3>Color Codes</h3>
+                <div class="color-output">
+                    <div class="output-row">
+                        <label>HEX</label>
+                        <div class="output-value-container">
+                            <span id="outputHex" class="output-value">#3498DB</span>
+                            <button id="copyHex" class="copy-btn" aria-label="Copy HEX value">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="5" y="5" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                    <path d="M3 11V3C3 2.44772 3.44772 2 4 2H10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span id="copyHexFeedback" class="copy-feedback"></span>
+                    </div>
+                    <div class="output-row">
+                        <label>RGB</label>
+                        <div class="output-value-container">
+                            <span id="outputRgb" class="output-value">52, 152, 219</span>
+                            <button id="copyRgb" class="copy-btn" aria-label="Copy RGB value">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="5" y="5" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                    <path d="M3 11V3C3 2.44772 3.44772 2 4 2H10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span id="copyRgbFeedback" class="copy-feedback"></span>
+                    </div>
+                    <div class="output-row">
+                        <label>CMYK</label>
+                        <div class="output-value-container">
+                            <span id="outputCmyk" class="output-value">76, 31, 0, 14</span>
+                            <button id="copyCmyk" class="copy-btn" aria-label="Copy CMYK value">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="5" y="5" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                    <path d="M3 11V3C3 2.44772 3.44772 2 4 2H10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span id="copyCmykFeedback" class="copy-feedback"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pin Color Button -->
+            <div class="section">
+                <button id="pinColorBtn" class="pin-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 2L10 6L14 7L11 10L11.5 14L8 12L4.5 14L5 10L2 7L6 6L8 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                    </svg>
+                    Pin This Color
+                </button>
+            </div>
+
+            <!-- Pinned Colors -->
+            <div class="section">
+                <h3>Pinned Colors <span id="pinnedCount" class="pinned-count">(0/8)</span></h3>
+                <div id="pinnedColors" class="pinned-colors-grid" role="group" aria-label="Pinned colors"></div>
+                <p class="pinned-hint">Click any pinned color to restore it</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Swatch Panel &copy; 2026 | Fully client-side, no backend required</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
